@@ -9,8 +9,12 @@ var FONT_GAP = 15;
 var MAX_BAR_HEIGHT = 150;
 var BAR_WIDTH = 40;
 var BAR_GAP = 50;
-var LEFT_GAP = 20;
-var TOP_GAP = 20;
+var LEFT_GAP = 50;
+var TOP_GAP = 25;
+var CLOUD_COLOR = '#fff';
+var SHADOW_COLOR = 'rgba(0, 0, 0, 0.7)';
+var FONT_COLOR = '#000';
+var MAIN_USER_COLOR = 'rgba(255, 0, 0, 1)';
 
 var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
@@ -34,12 +38,12 @@ var getMaxElement = function (array) {
 };
 
 window.renderStatistics = function (ctx, names, times) {
-  renderCloud(ctx, CLOUD_X + SHADOW_GAP, CLOUD_Y + SHADOW_GAP, 'rgba(0, 0, 0, 0.7)');
-  renderCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
+  renderCloud(ctx, CLOUD_X + SHADOW_GAP, CLOUD_Y + SHADOW_GAP, SHADOW_COLOR);
+  renderCloud(ctx, CLOUD_X, CLOUD_Y, CLOUD_COLOR);
 
-  ctx.fillStyle = '#000';
+  ctx.fillStyle = FONT_COLOR;
   ctx.font = '16px PT Mono';
-  ctx.textBaseline = 'hanging';
+  ctx.textBaseline = 'alphabetic';
 
   ctx.fillText('Ура вы победили!', CLOUD_X + LEFT_GAP, CLOUD_Y + TOP_GAP);
   ctx.fillText('Список результатов:', CLOUD_X + LEFT_GAP, CLOUD_Y + TOP_GAP + FONT_GAP);
@@ -49,15 +53,16 @@ window.renderStatistics = function (ctx, names, times) {
     ctx.fillStyle = 'hsl(240,' + Math.random() * 100 + '%, 50%)';
 
     if (names[i] === 'Вы') {
-      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+      ctx.fillStyle = MAIN_USER_COLOR;
     }
 
     var barHeight = MAX_BAR_HEIGHT * times[i] / maxTime;
+    var barX = CLOUD_X + LEFT_GAP + i * (BAR_WIDTH + BAR_GAP);
+    var barY = CLOUD_HEIGHT - 30 - barHeight;
 
-    ctx.fillRect(CLOUD_X + LEFT_GAP + i * (BAR_WIDTH + BAR_GAP), CLOUD_Y + 50 + MAX_BAR_HEIGHT - barHeight, BAR_WIDTH, barHeight);
-
-    ctx.fillStyle = '#000';
-    ctx.fillText(names[i], CLOUD_X + LEFT_GAP + i * (BAR_WIDTH + BAR_GAP), CLOUD_Y + 50 + MAX_BAR_HEIGHT + 20);
-    ctx.fillText(Math.round(times[i]).toString(), CLOUD_X + LEFT_GAP + i * (BAR_WIDTH + BAR_GAP), CLOUD_Y + 50 + MAX_BAR_HEIGHT - barHeight - 20);
+    ctx.fillRect(barX, barY, BAR_WIDTH, barHeight);
+    ctx.fillStyle = FONT_COLOR;
+    ctx.fillText(names[i], barX, CLOUD_HEIGHT - 10);
+    ctx.fillText(Math.round(times[i]).toString(), barX, barY - 10);
   }
 };
