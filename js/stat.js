@@ -21,6 +21,35 @@ var renderCloud = function (ctx, x, y, color) {
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
 };
 
+var renderHeading = function (ctx) {
+  ctx.fillStyle = FONT_COLOR;
+  ctx.font = '16px PT Mono';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('Ура вы победили!', CLOUD_X + LEFT_GAP, CLOUD_Y + TOP_GAP);
+  ctx.fillText('Список результатов:', CLOUD_X + LEFT_GAP, CLOUD_Y + TOP_GAP + FONT_GAP);
+};
+
+var renderBarChart = function (ctx, names, times) {
+  var maxTime = getMaxElement(times);
+
+  for (var i = 0; i < names.length; i++) {
+    ctx.fillStyle = 'hsl(240,' + Math.random() * 100 + '%, 50%)';
+
+    if (names[i] === 'Вы') {
+      ctx.fillStyle = MAIN_USER_COLOR;
+    }
+
+    var barHeight = MAX_BAR_HEIGHT * times[i] / maxTime;
+    var barX = CLOUD_X + LEFT_GAP + i * (BAR_WIDTH + BAR_GAP);
+    var barY = CLOUD_HEIGHT - 30 - barHeight;
+
+    ctx.fillRect(barX, barY, BAR_WIDTH, barHeight);
+    ctx.fillStyle = FONT_COLOR;
+    ctx.fillText(names[i], barX, CLOUD_HEIGHT - 10);
+    ctx.fillText(Math.round(times[i]).toString(), barX, barY - 10);
+  }
+};
+
 var getMaxElement = function (array) {
   if (!array.length) {
     return 0;
@@ -40,29 +69,6 @@ var getMaxElement = function (array) {
 window.renderStatistics = function (ctx, names, times) {
   renderCloud(ctx, CLOUD_X + SHADOW_GAP, CLOUD_Y + SHADOW_GAP, SHADOW_COLOR);
   renderCloud(ctx, CLOUD_X, CLOUD_Y, CLOUD_COLOR);
-
-  ctx.fillStyle = FONT_COLOR;
-  ctx.font = '16px PT Mono';
-  ctx.textBaseline = 'alphabetic';
-
-  ctx.fillText('Ура вы победили!', CLOUD_X + LEFT_GAP, CLOUD_Y + TOP_GAP);
-  ctx.fillText('Список результатов:', CLOUD_X + LEFT_GAP, CLOUD_Y + TOP_GAP + FONT_GAP);
-  var maxTime = getMaxElement(times);
-
-  for (var i = 0; i < names.length; i++) {
-    ctx.fillStyle = 'hsl(240,' + Math.random() * 100 + '%, 50%)';
-
-    if (names[i] === 'Вы') {
-      ctx.fillStyle = MAIN_USER_COLOR;
-    }
-
-    var barHeight = MAX_BAR_HEIGHT * times[i] / maxTime;
-    var barX = CLOUD_X + LEFT_GAP + i * (BAR_WIDTH + BAR_GAP);
-    var barY = CLOUD_HEIGHT - 30 - barHeight;
-
-    ctx.fillRect(barX, barY, BAR_WIDTH, barHeight);
-    ctx.fillStyle = FONT_COLOR;
-    ctx.fillText(names[i], barX, CLOUD_HEIGHT - 10);
-    ctx.fillText(Math.round(times[i]).toString(), barX, barY - 10);
-  }
+  renderHeading(ctx);
+  renderBarChart(ctx, names, times);
 };
