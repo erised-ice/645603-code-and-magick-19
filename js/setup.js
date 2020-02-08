@@ -15,6 +15,8 @@ var similarWizardTemplate = document.querySelector('#similar-wizard-template')
   .content
   .querySelector('.setup-similar-item');
 var setupSimilar = userDialog.querySelector('.setup-similar');
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = userDialog.querySelector('.setup-close');
 
 // Функции
 
@@ -66,6 +68,14 @@ var renderWizards = function (wizardsArray, container) {
 
   container.appendChild(fragment);
 };
+
+setupOpen.addEventListener('click', function () {
+  showDomElement(userDialog);
+});
+
+setupClose.addEventListener('click', function () {
+  userDialog.classList.add('hidden');
+});
 
 // Вызовы функций
 
